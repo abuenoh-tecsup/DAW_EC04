@@ -4,6 +4,7 @@ import com.tecsup.demo.dto.UserDTO;
 import com.tecsup.demo.entity.User;
 import com.tecsup.demo.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,11 +20,13 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public List<User> listAll() {
         return userService.listAll();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<User> getById(@PathVariable Long id) {
         return userService.findById(id)
@@ -44,6 +47,7 @@ public class UserController {
         return userService.save(user);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<User> update(@PathVariable Long id, @RequestBody UserDTO dto) {
         return userService.findById(id)
@@ -60,6 +64,7 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         if (userService.findById(id).isPresent()) {
@@ -69,6 +74,7 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/me")
     public ResponseEntity<User> getCurrentUser(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(user);

@@ -124,6 +124,21 @@ function TaskDetail() {
         {isStudent && (
           <div className="mb-5">
             <h4>{hasSubmitted ? "Editar Entrega" : "Realizar Entrega"}</h4>
+
+            {/* Mostrar estado y nota si ya hay entrega */}
+            {submission && (
+              <div className="mb-3">
+                <p>
+                  <strong>Estado:</strong> {submission.status}
+                </p>
+                {submission.status === "graded" && (
+                  <p>
+                    <strong>Nota:</strong> {submission.grade}
+                  </p>
+                )}
+              </div>
+            )}
+
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label className="form-label">URL del Archivo</label>
@@ -165,16 +180,27 @@ function TaskDetail() {
               <ul className="list-group">
                 {allSubmissions.map((s) => (
                   <li key={s.id} className="list-group-item">
-                    <strong>{s.user.firstName} {s.user.lastName}</strong> —{" "}
-                    <a href={s.fileUrl} target="_blank" rel="noopener noreferrer">
+                    <strong>
+                      {s.user.firstName} {s.user.lastName}
+                    </strong>{" "}
+                    —{" "}
+                    <a
+                      href={s.fileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       Ver archivo
                     </a>
                     <br />
                     <small>
                       Entregado: {new Date(s.submissionDate).toLocaleString()}
-                      {s.comments && <><br />Comentario: {s.comments}</>}
+                      {s.comments && (
+                        <>
+                          <br />
+                          Comentario: {s.comments}
+                        </>
+                      )}
                     </small>
-
                     {s.grade != null ? (
                       <p className="mt-2 mb-0">
                         Nota: <strong>{s.grade}</strong>

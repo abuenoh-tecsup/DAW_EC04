@@ -8,6 +8,7 @@ import com.tecsup.demo.service.SubmissionService;
 import com.tecsup.demo.service.TaskService;
 import com.tecsup.demo.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,11 +27,13 @@ public class SubmissionController {
         this.taskService = taskService;
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping
     public List<Submission> listAll() {
         return submissionService.listAll();
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public ResponseEntity<Submission> getById(@PathVariable Long id) {
         return submissionService.findById(id)
@@ -38,6 +41,7 @@ public class SubmissionController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/task/{taskId}")
     public ResponseEntity<List<Submission>> getByTask(@PathVariable Long taskId) {
         return taskService.findById(taskId)
@@ -45,7 +49,7 @@ public class SubmissionController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-
+    @PreAuthorize("hasRole('STUDENT')")
     @PostMapping
     public ResponseEntity<?> create(@RequestBody SubmissionDTO dto) {
         User user = userService.findById(dto.getUserId()).orElse(null);
@@ -67,6 +71,7 @@ public class SubmissionController {
         return ResponseEntity.ok(submissionService.save(submission));
     }
 
+    @PreAuthorize("hasAnyRole('STUDENT', 'PROFESSOR')")
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody SubmissionDTO dto) {
         return submissionService.findById(id)
@@ -91,6 +96,7 @@ public class SubmissionController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasRole('STUDENT')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         if (submissionService.findById(id).isPresent()) {

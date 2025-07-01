@@ -4,6 +4,7 @@ import com.tecsup.demo.dto.TaskDTO;
 import com.tecsup.demo.entity.Task;
 import com.tecsup.demo.service.TaskService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,11 +19,13 @@ public class TaskController {
         this.taskService = taskService;
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping
     public List<Task> listAll() {
         return taskService.listAll();
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public ResponseEntity<Task> getById(@PathVariable Long id) {
         return taskService.findById(id)
@@ -30,6 +33,7 @@ public class TaskController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasRole('PROFESSOR')")
     @PostMapping
     public Task create(@RequestBody TaskDTO dto) {
         Task task = new Task();
@@ -40,6 +44,7 @@ public class TaskController {
         return taskService.save(task);
     }
 
+    @PreAuthorize("hasRole('PROFESSOR')")
     @PutMapping("/{id}")
     public ResponseEntity<Task> update(@PathVariable Long id, @RequestBody TaskDTO dto) {
         return taskService.findById(id)
@@ -53,6 +58,7 @@ public class TaskController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasRole('PROFESSOR')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         if (taskService.findById(id).isPresent()) {

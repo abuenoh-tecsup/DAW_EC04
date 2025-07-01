@@ -1,3 +1,0 @@
-INSERT INTO user (username, password, email, first_name, last_name, phone, role) VALUES ('admin',    '$2a$12$jvH65NZBMd8NxWSyZiNUIeYJcswpe/Gf2YozExmC6F0YX4j0FKGXS', 'admin@mail.com',    'Admin',    'Root',    '999111222', 'admin');
-INSERT INTO user (username, password, email, first_name, last_name, phone, role) VALUES ('profesor', '$2a$12$zOBv8azNm5HfniXtJ7wFX.zap2H2UtKo.VWwCk/ooPsDcBKZ2U96S', 'profesor@mail.com', 'Ricardo',    'Coello', '999222333', 'professor');
-INSERT INTO user (username, password, email, first_name, last_name, phone, role) VALUES ('estudiante', '$2a$12$DAIexxfiQXDwFPJ1tHZtP.LGXBQgwtctjGkMIgtd0mnAUZ3IEukuS', 'estudiante@mail.com', 'Alvaro', 'Bueno', '999333444', 'student');
